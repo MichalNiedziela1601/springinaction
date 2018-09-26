@@ -1,0 +1,6 @@
+rootProject.name = 'spitter'
+include 'spitter-domain-plain'
+include 'spitter-persistance-common'
+include 'spitter-domain-jpa'
+include 'spitter-persistance-jdbc-template'
+

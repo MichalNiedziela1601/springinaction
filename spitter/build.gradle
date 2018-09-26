@@ -1,0 +1,103 @@
+description = 'spitter'
+
+apply plugin: 'base'
+apply plugin: 'idea'
+
+
+
+allprojects {
+    group 'com.springinaction.spitter'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+
+    sourceCompatibility = 1.8
+
+    ext {
+        libsBinDir = new File(libsDir, 'bin')
+        libsSrcDir = new File(libsDir, 'src')
+
+        commonsHttpClientVersion = '3.1'
+        jacksonVersion = '1.5.3'
+        jodaVersion = '1.6.2'
+        junitVersion = '4.12'
+        mockitoVersion = '1.8.5'
+        s2OAuthVersion = '1.0.0.M1'
+        scribeVersion = '1.0.8'
+        servletApiVersion = '2.5'
+        springVersion = '4.3.19.RELEASE'
+    }
+
+
+    sourceSets {
+        test {
+            resources {
+                srcDirs = ['src/test/resource', 'src/test/java']
+            }
+        }
+    }
+
+    configurations {
+        provided { transitive = false }
+    }
+
+    sourceSets.main.compileClasspath += configurations.provided
+    sourceSets.test.compileClasspath += configurations.provided
+
+    dependencies {
+        compile 'log4j:log4j:1.2.13'
+        compile 'javax.inject:javax.inject:1'
+        testCompile "junit:junit:$junitVersion"
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
+        testCompile "org.springframework:spring-test:$springVersion"
+    }
+}
+
+project('spitter-domain-plain') {
+    description = 'Spitter Domain Plain'
+    dependencies {
+        compile "javax.persistence:persistence-api:1.0"
+        compile "javax.validation:validation-api:1.0.0.GA"
+        compile "commons-lang:commons-lang:2.4"
+        compile "org.codehaus.jackson:jackson-core-asl:1.6.3"
+        compile "org.springframework:spring-context:$springVersion"
+    }
+}
+
+project('spitter-domain-jpa') {
+    description = 'Spitter Domain JPA-Annotated'
+    dependencies {
+        compile "javax.persistence:persistence-api:1.0"
+        compile "javax.validation:validation-api:1.0.0.GA"
+        compile "commons-lang:commons-lang:2.4"
+        compile "org.codehaus.jackson:jackson-core-asl:1.6.3"
+        compile "org.springframework:spring-context:$springVersion"
+    }
+}
+
+project('spitter-persistance-common') {
+    description = 'Spitter persistance common'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+    }
+}
+
+project('spitter-persistance-jdbc-template') {
+    description = 'Spitter user JDBC template'
+    dependencies {
+        compile "org.springframework:spring-jdbc:$springVersion"
+        compile "joda-time:joda-time:$jodaVersion"
+        compile project(':spitter-domain-plain')
+        compile project(':spitter-persistance-common')
+        testCompile "com.h2database:h2:1.2.143"
+    }
+}
+

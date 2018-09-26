@@ -1,0 +1,14 @@
+.idea/
+*.iml
+.gradle
+target
+build/
+chapter3/src/main/resources/
+spitter/spitter-domain-jpa/build/tmp/compileJava/
+spitter/spitter-domain-plain/build/tmp/compileJava/
+spitter/spitter-persistance-common/build/tmp/compileJava/
+spitter/spitter-persistance-jdbc-template/build/classes/test/
+spitter/spitter-persistance-jdbc-template/build/tmp/
+spitter/src/
+src/
+out/
